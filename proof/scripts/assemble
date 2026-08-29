@@ -30,7 +30,6 @@ import os
 import shutil
 import subprocess
 import sys
-import urllib.parse
 from pathlib import Path
 
 import yaml
@@ -59,8 +58,11 @@ def die(msg):
     sys.exit(1)
 
 
-def run(cmd):
-    r = subprocess.run(cmd, capture_output=True, text=True)
+def run(cmd, timeout=None):
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        die(f"timed out ({timeout}s): {' '.join(map(str, cmd))[:240]}")
     if r.returncode != 0:
         die(f"{' '.join(map(str, cmd))}\n{r.stderr.strip()[:500]}")
     return r
@@ -95,9 +97,12 @@ def make_card(scene, png, w, h, browser):
         TITLE=scene.get("title", ""), SUB=scene.get("subtitle", ""))
     tmp = png.with_suffix(".html")
     tmp.write_text(html)
-    run([browser, "--headless=new", "--disable-gpu", "--hide-scrollbars",
-         f"--screenshot={png}", f"--window-size={w},{h}",
-         "--force-device-scale-factor=1", "file://" + urllib.parse.quote(str(tmp))])
+    # as_uri() yields file:///abs/path — quote(str(path)) becomes file://rel
+    # which Chrome treats as a host and hangs on ERR_INVALID_URL.
+    url = Path(tmp).resolve().as_uri()
+    run([browser, "--headless=new", "--no-sandbox", "--disable-gpu",
+         "--hide-scrollbars", f"--screenshot={png}", f"--window-size={w},{h}",
+         "--force-device-scale-factor=1", url], timeout=45)
 
 
 def main():

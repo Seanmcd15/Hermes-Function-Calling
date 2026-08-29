@@ -4,9 +4,8 @@ resolution:
   height: 800
 scenes:
   - id: title
-    kind: card
-    title: Hermes Function Calling
-    subtitle: proving the toolkit — schemas, parser, validator, live tool execution
+    kind: image
+    src: cards/title.png
     duration: 4
     narration: >-
       This is Hermes Function Calling. The eight billion parameter model is
@@ -49,9 +48,8 @@ scenes:
       on real Python. Squares of one through seven, total one hundred forty.
 
   - id: end
-    kind: card
-    title: the contract holds without the GPU
-    subtitle: schemas · parse · validate · execute — github.com/NousResearch/Hermes-Function-Calling
+    kind: image
+    src: cards/end.png
     duration: 4.5
     narration: >-
       Schema conversion, XML parse, argument checks, and a live tool. That

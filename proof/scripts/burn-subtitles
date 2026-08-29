@@ -30,8 +30,8 @@ def has_libass():
                for line in out.stdout.splitlines() if line.strip())
 
 
-def run(cmd):
-    r = subprocess.run(cmd, capture_output=True, text=True)
+def run(cmd, cwd=None):
+    r = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
     if r.returncode != 0:
         print(" ".join(map(str, cmd)), file=sys.stderr)
         print(r.stderr.strip()[:600], file=sys.stderr)
@@ -74,7 +74,8 @@ def main():
                   "-vf", f"subtitles=filename={args.subs.name}:"
                          f"force_style='{style}'",
                   "-c:a", "copy", "-c:v", "libx264", "-preset", "medium",
-                  "-pix_fmt", "yuv420p", str(args.out.resolve())])
+                  "-pix_fmt", "yuv420p", str(args.out.resolve())],
+                 cwd=str(args.subs.resolve().parent))
         if ok:
             print(f"burned into the picture -> {args.out}")
             return 0

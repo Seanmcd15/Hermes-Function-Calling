@@ -33,8 +33,10 @@ proof/make-movie.sh
 ```
 
 `proof/scripts/` are the proving-it-works helpers (MIT), vendored so the
-movie can be re-cut without a plugin install.
+movie can be re-cut without a plugin install. Title/end cards are PNG
+stills from `render_cards.py` (PIL) so assemble does not depend on a
+browser.
 
 Frames, narration wavs, and the encoded movie stay out of git — they are
-scratch. `scenes.yaml`, `show.py`, `film.py`, and `make-movie.sh` are the
-source of truth.
+scratch. `scenes.yaml`, `show.py`, `film.py`, `render_cards.py`,
+`cards/*.png`, and `make-movie.sh` are the source of truth.

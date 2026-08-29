@@ -41,6 +41,7 @@ if ! curl -fsS "http://127.0.0.1:${TTYD_PORT}/" >/dev/null 2>&1; then
   done
 fi
 
+python "$PROOF/render_cards.py"
 python "$PROOF/film.py" tools    "http://127.0.0.1:${TTYD_PORT}/"
 python "$PROOF/film.py" parse    "http://127.0.0.1:${TTYD_PORT}/"
 python "$PROOF/film.py" validate "http://127.0.0.1:${TTYD_PORT}/"

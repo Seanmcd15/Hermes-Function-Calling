@@ -158,7 +158,10 @@ async def main(segment: str, url: str) -> None:
         old.unlink()
 
     # Drop a leftover debug Chrome so this take owns DEBUG_PORT.
-    subprocess.run(["fuser", "-k", f"{DEBUG_PORT}/tcp"], capture_output=True)
+    subprocess.run(
+        ["pkill", "-f", f"--remote-debugging-port={DEBUG_PORT}"],
+        capture_output=True,
+    )
     time.sleep(0.4)
 
     profile = HERE / "chrome-profile"
